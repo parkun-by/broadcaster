@@ -31,7 +31,7 @@ async def broadcast(body) -> None:
     data = json.loads(body)
     logger.info(f'Сообщение от бота: {data}')
 
-    caption = _get_caption(data['titles'], data['texts'])
+    caption = data['caption']
     photo_paths = data['photo_paths']
     coordinates = data['coordinates']
     await broadcaster.share(caption, photo_paths, coordinates)
@@ -39,20 +39,6 @@ async def broadcast(body) -> None:
     user_id = data['user_id']
     appeal_id = data['appeal_id']
     storage_cleaner.clean(user_id, appeal_id)
-
-
-def _get_caption(titles: dict, texts: dict) -> str:
-    date_time = texts['violation_datetime']
-    address = texts['violation_location']
-    plate = texts['violation_plate']
-
-    date_time_title = titles['violation_datetime']
-    address_title = titles['violation_location']
-    plate_title = titles['violation_plate']
-
-    return f'{date_time_title} {date_time} \n' + \
-        f'{address_title} {address} \n' + \
-        f'{plate_title} {plate}'
 
 
 if __name__ == "__main__":
