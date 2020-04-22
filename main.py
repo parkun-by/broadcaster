@@ -33,7 +33,7 @@ async def broadcast(body) -> None:
 
     caption = data['caption']
     photo_paths = data['photo_paths']
-    coordinates = data['coordinates']
+    coordinates = data.get('coordinates', [None, None])
     await broadcaster.share(caption, photo_paths, coordinates)
 
     user_id = data['user_id']
