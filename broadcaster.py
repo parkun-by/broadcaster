@@ -9,12 +9,14 @@ class Broadcaster:
         self.twitter = Twitter()
 
     async def share(self,
-                    caption: str,
+                    title: str,
+                    text: str,
                     photo_paths: list,
                     coordinates: list) -> None:
         logger.info('Шарим пост')
 
         try:
-            await self.twitter.post(caption, photo_paths, coordinates)
+            self.twitter.prepare_pictures(photo_paths, text)
+            await self.twitter.post(title, photo_paths, coordinates)
         except Exception:
             logger.exception("Twitter exception")

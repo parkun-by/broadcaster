@@ -15,7 +15,7 @@ logging.basicConfig(
 logger = logging.getLogger("broadcaster")
 
 broadcaster = Broadcaster()
-storage_cleaner = StorageCleaner(config.TEMP_FILES_PATH)
+storage_cleaner = StorageCleaner()
 
 
 def main():
@@ -31,15 +31,18 @@ async def broadcast(body) -> None:
     data = json.loads(body)
     logger.info(f'Сообщение от бота: {data}')
 
-    caption = data['caption']
+    storage_cleaner.create_folder()
+
+    title = data['title']
+    text = data['text']
     photo_paths = data['photo_paths']
     coordinates = data.get('coordinates', [None, None])
-    await broadcaster.share(caption, photo_paths, coordinates)
+    await broadcaster.share(title, text, photo_paths, coordinates)
 
     user_id = data['user_id']
     appeal_id = data['appeal_id']
-    storage_cleaner.clean(user_id, appeal_id)
-
+    storage_cleaner.clean_bot_files(user_id=user_id, appeal_id=appeal_id)
+    storage_cleaner.delete_folder()
 
 if __name__ == "__main__":
     main()

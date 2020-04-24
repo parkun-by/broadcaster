@@ -21,3 +21,4 @@ BROADCAST_QUEUE = 'broadcast'
 
 
 TEMP_FILES_PATH = '/tmp/temp_files_parkun'
+PERSONAL_FOLDER = 'broadcaster'
