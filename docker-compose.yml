@@ -1,0 +1,16 @@
+version: '3.5'
+
+networks:
+  proxynet:
+    name: parkun
+
+services:
+  broadcaster:
+    image: broadcaster
+    networks:
+      - proxynet
+    volumes:
+      - /tmp/temp_files_parkun:/tmp/temp_files_parkun
+    build:
+      context: .
+      dockerfile: Dockerfile
