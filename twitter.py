@@ -45,7 +45,7 @@ class Twitter:
 
         return list(zip(tweets_text, tweets_photos))
 
-    def prepare_pictures(self, current: list, text_to_pic: str) -> list:
+    def _prepare_pictures(self, current: list, text_to_pic: str) -> list:
         if text_to_pic:
             text_pic = self._text2png(text_to_pic)
             current.append(text_pic)
@@ -111,9 +111,15 @@ class Twitter:
 
     async def post(self,
                    caption: str,
+                   text: str,
                    photo_paths: list,
                    coordinates: list) -> None:
         logger.info(f"Sending Tweet")
+
+        if not caption and len(text) < config.MAX_TWI_CHARACTERS:
+            caption = text
+        else:
+            self._prepare_pictures(photo_paths, text)
 
         if not self.client:
             return

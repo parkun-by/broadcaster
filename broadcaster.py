@@ -16,7 +16,6 @@ class Broadcaster:
         logger.info('Шарим пост')
 
         try:
-            self.twitter.prepare_pictures(photo_paths, text)
-            await self.twitter.post(title, photo_paths, coordinates)
+            await self.twitter.post(title, text, photo_paths, coordinates)
         except Exception:
             logger.exception("Twitter exception")
