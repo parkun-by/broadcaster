@@ -33,10 +33,10 @@ async def broadcast(body) -> None:
 
     storage_cleaner.create_folder()
 
-    title = data['title']
-    text = data['text']
-    photo_paths = data['photo_paths']
-    coordinates = data.get('coordinates', [None, None])
+    title = data.get('title', '') or ''
+    text = data.get('text', '') or ''
+    photo_paths = data.get('photo_paths', []) or []
+    coordinates = data.get('coordinates', [None, None]) or [None, None]
     await broadcaster.share(title, text, photo_paths, coordinates)
 
     user_id = data['user_id']

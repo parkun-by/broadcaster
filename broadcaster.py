@@ -1,4 +1,5 @@
 from twitter import Twitter
+from vk import vk
 import logging
 
 logger = logging.getLogger(__name__)
@@ -7,6 +8,7 @@ logger = logging.getLogger(__name__)
 class Broadcaster:
     def __init__(self):
         self.twitter = Twitter()
+        self.vk = vk()
 
     async def share(self,
                     title: str,
@@ -19,3 +21,8 @@ class Broadcaster:
             await self.twitter.post(title, text, photo_paths, coordinates)
         except Exception:
             logger.exception("Twitter exception")
+
+        try:
+            await self.vk.post(title, text, photo_paths)
+        except Exception:
+            logger.exception("VK exception")
