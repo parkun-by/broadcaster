@@ -20,8 +20,10 @@ class StorageCleaner:
     def clean_bot_files(self, user_id: int, appeal_id: int):
         logger.info(f'Чистим файлы user_id {user_id} appeal_id {appeal_id}')
 
-        shutil.rmtree(self._get_user_dir(user_id, appeal_id),
-                      ignore_errors=True)
+        try:
+            shutil.rmtree(self._get_user_dir(user_id, appeal_id))
+        except Exception:
+            logger.exception("Can't delete files")
 
     def delete_folder(self):
         logger.info(f'Чистим файлы по пути: {self.path}')
