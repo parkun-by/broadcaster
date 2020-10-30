@@ -1,6 +1,7 @@
 import logging
 from asyncio.events import AbstractEventLoop
 
+from http_rabbit import Rabbit
 from telegram import Telegram
 from twitter import Twitter
 from vk import vk
@@ -13,13 +14,18 @@ class Broadcaster:
         self.twitter = Twitter()
         self.vk = vk()
         self.telegram = Telegram(loop)
+        self.rabbit = Rabbit()
 
     async def share(self,
+                    user_id: int,
+                    appeal_id: int,
                     title: dict,
                     body: dict,
                     photo_paths: list,
                     tg_photo_ids: list,
-                    coordinates: list) -> None:
+                    coordinates: list,
+                    reply_id: int,
+                    reply_type: str) -> None:
         logger.info('Шарим пост')
 
         title_text = title.get('text', '') or ''
@@ -34,11 +40,17 @@ class Broadcaster:
             logger.exception("VK exception")
 
         try:
-            await self.telegram.post(title_text,
-                                     title_formatting,
-                                     body_text,
-                                     body_formatting,
-                                     tg_photo_ids)
+            post_url = await self.telegram.post(title_text,
+                                                title_formatting,
+                                                body_text,
+                                                body_formatting,
+                                                tg_photo_ids)
+
+            await self.rabbit.send_message(appeal_id,
+                                           user_id,
+                                           reply_id,
+                                           reply_type,
+                                           post_url)
         except Exception:
             logger.exception("Telegram exception")
 

@@ -39,18 +39,25 @@ async def broadcast(message_body: str) -> None:
     body: dict = data.get('body', dict()) or dict()
     photo_paths = data.get('photo_paths', list()) or list()
     tg_photo_ids = data.get('tg_photo_ids', list()) or list()
+    reply_id: int = data.get('reply_id', 0) or 0
+    reply_type: str = data.get('reply_type', '') or ''
 
     coordinates = data.get('coordinates',
                            list([None, None])) or list([None, None])
 
-    await broadcaster.share(title,
+    user_id: int = data['user_id']
+    appeal_id: int = data['appeal_id']
+
+    await broadcaster.share(user_id,
+                            appeal_id,
+                            title,
                             body,
                             photo_paths,
                             tg_photo_ids,
-                            coordinates)
+                            coordinates,
+                            reply_id,
+                            reply_type)
 
-    user_id = data['user_id']
-    appeal_id = data['appeal_id']
     storage_cleaner.clean_bot_files(user_id=user_id, appeal_id=appeal_id)
     storage_cleaner.delete_folder()
 

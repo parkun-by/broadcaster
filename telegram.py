@@ -1,7 +1,7 @@
 import logging
 from asyncio.events import AbstractEventLoop
 
-from aiogram import Bot
+from aiogram import Bot, types
 
 from config import BOLD, ITALIC, MONO, STRIKE, TG_BOT_TOKEN, TG_CHANNEL
 from photoitem import PhotoItem
@@ -22,15 +22,21 @@ class Telegram:
                    title_formatting: list,
                    body_text: str,
                    body_formatting: list,
-                   photo_ids: list):
+                   photo_ids: list) -> str:
         title = self._get_formatted(title_text, title_formatting)
         body = self._get_formatted(body_text, body_formatting)
         text = f'{title}\n\n{body}'
 
         if photo_ids:
-            await self._send_photos_group_with_caption(photo_ids, text)
+            message = await self._send_photos_group_with_caption(photo_ids,
+                                                                 text)
         else:
-            await self._bot.send_message(TG_CHANNEL, text, parse_mode='HTML')
+            message = await self._bot.send_message(TG_CHANNEL,
+                                                   text,
+                                                   parse_mode='HTML')
+
+        channel = TG_CHANNEL.replace('@', '')
+        return f't.me/{channel}/{str(message.message_id)}'
 
     def _get_formatted(self, text: str, formatting: list) -> str:
         """
@@ -50,7 +56,7 @@ class Telegram:
 
     async def _send_photos_group_with_caption(self,
                                               photo_ids: list,
-                                              caption='') -> None:
+                                              caption='') -> types.Message:
         photos = []
 
         for count, photo_id in enumerate(photo_ids):
@@ -63,4 +69,7 @@ class Telegram:
             photo = PhotoItem('photo', photo_id, text)
             photos.append(photo)
 
-        await self._bot.send_media_group(chat_id=TG_CHANNEL, media=photos)
+        messages = await self._bot.send_media_group(chat_id=TG_CHANNEL,
+                                                    media=photos)
+
+        return messages[0]

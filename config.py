@@ -7,6 +7,8 @@ ITALIC = 'italic'
 MONO = 'mono'
 STRIKE = 'strike'
 
+POST_URL = 'post_url'
+
 # Twitter
 CONSUMER_KEY = 'consumer_key'
 CONSUMER_SECRET = 'consumer_secret'
@@ -19,6 +21,7 @@ TWI_URL = 'twitter.com/SOME_TWITTER_ACCOUNT'
 # RabbitMQ
 RABBIT_HOST = 'localhost'
 RABBIT_AMQP_PORT = '5672'
+RABBIT_HTTP_PORT = '15672'
 
 RABBIT_LOGIN = 'broadcaster'
 RABBIT_PASSWORD = 'broadcaster'
@@ -26,7 +29,13 @@ RABBIT_PASSWORD = 'broadcaster'
 RABBIT_AMQP_ADDRESS = \
     f'amqp://{RABBIT_LOGIN}:{RABBIT_PASSWORD}@{RABBIT_HOST}:{RABBIT_AMQP_PORT}'
 
+RABBIT_HTTP_ADDRESS = \
+    f'http://{RABBIT_LOGIN}:{RABBIT_PASSWORD}@{RABBIT_HOST}:{RABBIT_HTTP_PORT}'
+
 BROADCAST_QUEUE = 'broadcast'
+RABBIT_EXCHANGE_SHARING = 'sharing'
+ROUTING_KEY = 'sharing_status'
+
 
 # VK (see readme.md)
 VK_APP_ID = 'vk_app_id'  # just to remember
