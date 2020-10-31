@@ -18,10 +18,11 @@ class StorageCleaner:
             pass
 
     def clean_bot_files(self, user_id: int, appeal_id: int):
-        logger.info(f'Чистим файлы user_id {user_id} appeal_id {appeal_id}')
+        path = self._get_user_dir(user_id, appeal_id)
+        logger.info(f'Чистим каталог {path}')
 
         try:
-            shutil.rmtree(self._get_user_dir(user_id, appeal_id))
+            shutil.rmtree(path)
         except Exception:
             logger.exception("Can't delete files")
 
@@ -41,4 +42,6 @@ class StorageCleaner:
     def _get_user_dir_name(self,
                            user_id: int,
                            appeal_id: int) -> str:
-        return os.path.join(self.path, str(user_id), str(appeal_id))
+        return os.path.join(config.TEMP_FILES_PATH,
+                            str(user_id),
+                            str(appeal_id))
