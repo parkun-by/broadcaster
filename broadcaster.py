@@ -35,8 +35,6 @@ class Broadcaster:
         body_text = body.get('text', '') or ''
         body_formatting = body.get('formatting', list()) or list()
 
-        await self._share_to_vk(title_text, body_text, photo_paths)
-
         await self._share_to_tg(title_text,
                                 title_formatting,
                                 body_text,
@@ -46,6 +44,8 @@ class Broadcaster:
                                 user_id,
                                 reply_id,
                                 reply_type)
+
+        await self._share_to_vk(title_text, body_text, photo_paths)
 
         await self._share_to_twi(title_text,
                                  body_text,
