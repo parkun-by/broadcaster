@@ -59,6 +59,7 @@ class Broadcaster:
 
         try:
             await self.vk.post(title, body, photo_paths)
+            logger.info("VK - shared")
         except Exception:
             logger.exception("VK exception")
 
@@ -83,6 +84,8 @@ class Broadcaster:
                                                 body_formatting,
                                                 photo_ids)
 
+            logger.info("Telegram - shared")
+
             await self.rabbit.send_message(appeal_id,
                                            user_id,
                                            reply_id,
@@ -105,5 +108,7 @@ class Broadcaster:
                                     body,
                                     photo_paths,
                                     coordinates)
+
+            logger.info("Twitter - shared")
         except Exception:
             logger.exception("Twitter exception")
