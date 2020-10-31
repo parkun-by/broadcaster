@@ -1,6 +1,7 @@
 import logging
 from asyncio.events import AbstractEventLoop
 
+from config import TG_ENABLED, TWITTER_ENABLED, VK_ENABLED
 from http_rabbit import Rabbit
 from telegram import Telegram
 from twitter import Twitter
@@ -34,17 +35,53 @@ class Broadcaster:
         body_text = body.get('text', '') or ''
         body_formatting = body.get('formatting', list()) or list()
 
+        await self._share_to_vk(title_text, body_text, photo_paths)
+
+        await self._share_to_tg(title_text,
+                                title_formatting,
+                                body_text,
+                                body_formatting,
+                                tg_photo_ids,
+                                appeal_id,
+                                user_id,
+                                reply_id,
+                                reply_type)
+
+        await self._share_to_twi(title_text,
+                                 body_text,
+                                 photo_paths,
+                                 coordinates)
+
+    async def _share_to_vk(self, title: str, body: str, photo_paths: list):
+        if not VK_ENABLED:
+            logger.info("VK is disabled in config")
+            return
+
         try:
-            await self.vk.post(title_text, body_text, photo_paths)
+            await self.vk.post(title, body, photo_paths)
         except Exception:
             logger.exception("VK exception")
+
+    async def _share_to_tg(self,
+                           title_text: str,
+                           title_formatting: list,
+                           body_text: str,
+                           body_formatting: list,
+                           photo_ids: list,
+                           appeal_id: int,
+                           user_id: int,
+                           reply_id: int,
+                           reply_type: str):
+        if not TG_ENABLED:
+            logger.info("Telegram is disabled in config")
+            return
 
         try:
             post_url = await self.telegram.post(title_text,
                                                 title_formatting,
                                                 body_text,
                                                 body_formatting,
-                                                tg_photo_ids)
+                                                photo_ids)
 
             await self.rabbit.send_message(appeal_id,
                                            user_id,
@@ -54,9 +91,18 @@ class Broadcaster:
         except Exception:
             logger.exception("Telegram exception")
 
+    async def _share_to_twi(self,
+                            title: str,
+                            body: str,
+                            photo_paths: list,
+                            coordinates: list):
+        if not TWITTER_ENABLED:
+            logger.info("Twitter is disabled in config")
+            return
+
         try:
-            await self.twitter.post(title_text,
-                                    body_text,
+            await self.twitter.post(title,
+                                    body,
                                     photo_paths,
                                     coordinates)
         except Exception:

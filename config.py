@@ -10,6 +10,7 @@ STRIKE = 'strike'
 POST_URL = 'post_url'
 
 # Twitter
+TWITTER_ENABLED = False
 CONSUMER_KEY = 'consumer_key'
 CONSUMER_SECRET = 'consumer_secret'
 ACCESS_TOKEN = 'access_token'
@@ -38,10 +39,12 @@ ROUTING_KEY = 'sharing_status'
 
 
 # VK (see readme.md)
+VK_ENABLED = False
 VK_APP_ID = 'vk_app_id'  # just to remember
 VK_GROUP_ID = 'vk_group_id'
 VK_API_TOKEN = 'vk_api_token'
 
 # Telegram
+TG_ENABLED = False
 TG_BOT_TOKEN = 'PUT_TOKEN_HERE'
 TG_CHANNEL = '@channel_name'
