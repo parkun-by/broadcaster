@@ -4,7 +4,7 @@ import logging
 import sys
 
 import config
-from amqp_rabbit import Rabbit
+from rabbit_amqp import Rabbit
 from broadcaster import Broadcaster
 from storage_cleaner import StorageCleaner
 

@@ -2,7 +2,7 @@ import logging
 from asyncio.events import AbstractEventLoop
 
 from config import TG_ENABLED, TWITTER_ENABLED, VK_ENABLED
-from http_rabbit import Rabbit
+from rabbit_http import Rabbit
 from telegram import Telegram
 from twitter import Twitter
 from vk import vk
