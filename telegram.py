@@ -3,7 +3,8 @@ from asyncio.events import AbstractEventLoop
 
 from aiogram import Bot, types
 
-from config import BOLD, ITALIC, MONO, STRIKE, TG_BOT_TOKEN, TG_CHANNEL
+from config import \
+    BOLD, ITALIC, MONO, STRIKE, TG_BOT_TOKEN, TG_CHANNEL, TG_ENABLED
 from photoitem import PhotoItem
 
 logger = logging.getLogger("telegram")
@@ -15,7 +16,10 @@ class Telegram:
     """
 
     def __init__(self, loop: AbstractEventLoop) -> None:
-        self._bot = Bot(token=TG_BOT_TOKEN, loop=loop)
+        if TG_ENABLED:
+            self._bot = Bot(token=TG_BOT_TOKEN, loop=loop)
+        else:
+            self._bot = None
 
     async def post(self,
                    title_text: str,
