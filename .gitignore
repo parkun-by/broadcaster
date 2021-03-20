@@ -119,3 +119,5 @@ dmypy.json
 .idea/
 env_docker/parkun_bot/config/config.py
 .devcontainer
+
+logs

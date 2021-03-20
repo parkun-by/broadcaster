@@ -1,17 +1,34 @@
 import asyncio
 import json
 import logging
-import sys
+from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
 import config
-from rabbit_amqp import Rabbit
 from broadcaster import Broadcaster
+from rabbit_amqp import Rabbit
 from storage_cleaner import StorageCleaner
 
+
+Path("./logs").mkdir(parents=True, exist_ok=True)
+
+file_handler_info = RotatingFileHandler("./logs/broadcaster_info.log",
+                                        maxBytes=100000000,
+                                        backupCount=5)
+file_handler_info.setLevel(logging.INFO)
+
+file_handler_error = RotatingFileHandler("./logs/broadcaster_error.log",
+                                         maxBytes=10000000,
+                                         backupCount=5)
+file_handler_error.setLevel(logging.ERROR)
+
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.INFO)
+
 logging.basicConfig(
-    stream=sys.stdout,
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[file_handler_info, file_handler_error, stream_handler])
 
 logger = logging.getLogger("broadcaster")
 storage_cleaner = StorageCleaner()
