@@ -16,10 +16,10 @@ class Telegram:
     """
 
     def __init__(self, loop: AbstractEventLoop) -> None:
+        self._bot: Bot
+
         if TG_ENABLED:
             self._bot = Bot(token=TG_BOT_TOKEN, loop=loop)
-        else:
-            self._bot = None
 
     async def post(self,
                    title_text: str,

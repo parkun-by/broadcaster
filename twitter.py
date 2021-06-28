@@ -11,9 +11,9 @@ logger = logging.getLogger(__name__)
 
 class Twitter:
     def __init__(self):
-        if config.ACCESS_TOKEN == 'access_token':
-            self.client = None
-        else:
+        self.client: PeonyClient
+
+        if config.ACCESS_TOKEN != 'access_token':
             self.client = PeonyClient(
                 consumer_key=config.CONSUMER_KEY,
                 consumer_secret=config.CONSUMER_SECRET,
