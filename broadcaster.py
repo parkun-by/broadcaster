@@ -1,3 +1,4 @@
+from local_types import Coordinates
 import logging
 from asyncio.events import AbstractEventLoop
 from typing import Optional, Tuple
@@ -9,8 +10,6 @@ from twitter import Twitter
 from vk import vk
 
 logger = logging.getLogger(__name__)
-
-Coordinates = Tuple[float, float]
 
 
 class Broadcaster:

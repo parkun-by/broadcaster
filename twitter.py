@@ -6,7 +6,7 @@ from peony import PeonyClient
 from PIL import Image, ImageDraw, ImageFont
 
 import config
-from broadcaster import Coordinates
+from local_types import Coordinates
 
 logger = logging.getLogger(__name__)
 

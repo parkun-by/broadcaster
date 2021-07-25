@@ -61,6 +61,10 @@ class vk:
         url = 'https://api.vk.com/method/photos.getWallUploadServer'
 
         response, status = await self._request_get(url, params)
+
+        if not response:
+            response = dict()
+
         upload_server = response['response']['upload_url']
 
         # подготавливаем и заливаем фото
@@ -72,6 +76,9 @@ class vk:
                 params.update(response)
                 url = 'https://api.vk.com/method/photos.saveWallPhoto'
                 response, status = await self._request_get(url, params)
+
+                if not response:
+                    response = dict()
 
                 uploaded_photos += response['response']
 
