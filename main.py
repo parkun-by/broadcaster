@@ -58,9 +58,7 @@ async def broadcast(message_body: str) -> None:
     tg_photo_ids = data.get('tg_photo_ids', list()) or list()
     reply_id: int = data.get('reply_id', 0) or 0
     reply_type: str = data.get('reply_type', '') or ''
-
-    coordinates = data.get('coordinates',
-                           list([None, None])) or list([None, None])
+    coordinates = data.get('coordinates', None) or None
 
     user_id: int = data['user_id']
     appeal_id: int = data['appeal_id']

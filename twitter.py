@@ -1,10 +1,12 @@
 import logging
 import os
+from typing import Optional
 
 from peony import PeonyClient
 from PIL import Image, ImageDraw, ImageFont
 
 import config
+from broadcaster import Coordinates
 
 logger = logging.getLogger(__name__)
 
@@ -113,7 +115,7 @@ class Twitter:
                    caption: str,
                    text: str,
                    photo_paths: list,
-                   coordinates: list) -> None:
+                   coordinates: Optional[Coordinates]) -> None:
         logger.info(f"Sending Tweet")
 
         if not caption and len(text) < config.MAX_TWI_CHARACTERS:
@@ -124,8 +126,7 @@ class Twitter:
         if not self.client:
             return
 
-        if not coordinates:
-            coordinates = [None, None]
+        coords = coordinates or (None, None)
 
         tweet_queue = self._get_tweet_queue(photo_paths, caption)
         reply_to = None
@@ -143,8 +144,8 @@ class Twitter:
                 status=tweet[0],
                 media_ids=media_ids,
                 in_reply_to_status_id=reply_to,
-                lat=coordinates[1],
-                long=coordinates[0]
+                lat=coords[1],
+                long=coords[0]
             )
 
             reply_to = tweet.data.id

@@ -1,5 +1,6 @@
 import logging
 from asyncio.events import AbstractEventLoop
+from typing import Optional, Tuple
 
 from config import TG_ENABLED, TWITTER_ENABLED, VK_ENABLED
 from rabbit_http import Rabbit
@@ -8,6 +9,8 @@ from twitter import Twitter
 from vk import vk
 
 logger = logging.getLogger(__name__)
+
+Coordinates = Tuple[float, float]
 
 
 class Broadcaster:
@@ -24,7 +27,7 @@ class Broadcaster:
                     body: dict,
                     photo_paths: list,
                     tg_photo_ids: list,
-                    coordinates: list,
+                    coordinates: Optional[Coordinates],
                     reply_id: int,
                     reply_type: str) -> None:
         logger.info('Шарим пост')
@@ -98,7 +101,7 @@ class Broadcaster:
                             title: str,
                             body: str,
                             photo_paths: list,
-                            coordinates: list):
+                            coordinates: Optional[Coordinates]):
         if not TWITTER_ENABLED:
             logger.info("Twitter is disabled in config")
             return
