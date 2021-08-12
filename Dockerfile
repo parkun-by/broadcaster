@@ -1,4 +1,4 @@
-FROM python:3.8.2-buster
+FROM python:3.8.6-buster
 
 WORKDIR /usr/src/app
 
@@ -8,4 +8,4 @@ RUN pip install --upgrade pip && \
 
 COPY . .
 
-CMD [ "./env_docker/broadcaster/entrypoint.sh" ]
+CMD ["python", "./main.py"]
