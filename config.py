@@ -45,8 +45,9 @@ RABBIT_HTTP_ADDRESS = \
     f'http://{RABBIT_LOGIN}:{RABBIT_PASSWORD}@{RABBIT_HOST}:{RABBIT_HTTP_PORT}'
 
 BROADCAST_QUEUE = 'broadcast'
-RABBIT_EXCHANGE_SHARING = 'sharing'
-ROUTING_KEY = 'sharing_status'
+RABBIT_EXCHANGE = 'sharing'
+ROUTING_KEY_SHARING_STATUS = 'sharing_status'
+ROUTING_KEY_VIOLATION = 'violation'
 
 
 # VK (see readme.md)

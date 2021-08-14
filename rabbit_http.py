@@ -44,6 +44,6 @@ class Rabbit:
             'post_url': post_url,
         }
 
-        await self._send(config.RABBIT_EXCHANGE_SHARING,
-                         config.ROUTING_KEY,
+        await self._send(config.RABBIT_EXCHANGE,
+                         config.ROUTING_KEY_SHARING_STATUS,
                          body)

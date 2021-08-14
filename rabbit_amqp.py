@@ -23,12 +23,14 @@ class Rabbit:
                 connected = True
                 pause = 1
             except Exception:
-                logger.info('Fail. Trying reconnect Rabbit.')
                 connected = False
                 await asyncio.sleep(pause)
 
                 if pause < 30:
+                    logger.info('Fail. Trying reconnect Rabbit.')
                     pause *= 2
+                else:
+                    logger.exception('Fail. Trying reconnect Rabbit.')
 
     async def connect(self,
                       loop: AbstractEventLoop,
@@ -41,12 +43,31 @@ class Rabbit:
 
         async with self.connection:
             # Creating channel
-            channel = await self.connection.channel()
+            channel: aio_pika.Channel = await self.connection.channel()
+
+            await channel.declare_exchange(
+                name=config.RABBIT_EXCHANGE,
+                type=aio_pika.exchange.ExchangeType.DIRECT,
+                durable=True,
+                auto_delete=False,
+                internal=False,
+                passive=False
+            )
 
             # Declaring queue
             queue = await channel.declare_queue(
-                queue_name,
-                passive=True
+                name=queue_name,
+                durable=True,
+                passive=False,
+                auto_delete=False,
+                arguments={
+                    "x-queue-mode": "lazy"
+                }
+            )
+
+            await queue.bind(
+                exchange=config.RABBIT_EXCHANGE,
+                routing_key=config.ROUTING_KEY_VIOLATION
             )
 
             logger.info("Подключились к раббиту")
